@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 const usersRoutes = require("./routes/usersRoutes");
 const postsRoutes = require("./routes/postsRoutes");
+require("dotenv").config();
 
 const app = express();
 
@@ -16,10 +17,10 @@ app.use(cors());
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/posts", postsRoutes);
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+app.listen(process.env.PORT_NUMBER, () => {
+  console.log(`Server is running on port ${process.env.PORT_NUMBER}`);
   mongoose
-    .connect("mongodb://localhost:27017/local")
+    .connect(process.env.CONNECTION_STRING)
     .then(() => {
       console.log("Connected to MongoDB");
     })
