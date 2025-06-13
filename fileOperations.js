@@ -33,12 +33,13 @@ const studentData = [
   },
 ];
 
-// Create the students.json file and add the data to it
+/*--------------Write student.json data--------------*/
 // Async
 function writeStudentDataAsync(data) {
   try {
-    fs.writeFile("students.json", JSON.stringify(data));
-    console.log("File written successfully");
+    fs.writeFile("students.json", JSON.stringify(data), () =>
+      console.log("File written successfully")
+    );
   } catch (err) {
     console.log(err);
   }
@@ -57,27 +58,27 @@ function writeStudentDataSync(data) {
 // writeStudentDataAsync(studentData);
 // writeStudentDataSync(studentData);
 
-// Read student.json data
+/*--------------Read student.json data--------------*/
 
 // Async
-function readStudentDataAsync() {
-  const parsedStudentData = fs.readFile(
-    "students.json",
-    "utf-8",
-    (err, data) => {
+async function readStudentDataAsync() {
+  return new Promise((resolve, reject) => {
+    fs.readFile("students.json", "utf-8", (err, data) => {
       if (err) {
-        console.log(err);
+        reject(error);
       } else {
         const parsed = JSON.parse(data);
-        console.log(parsed);
-        return parsed;
+        resolve(parsed);
       }
-    }
-  );
-  return parsedStudentData;
+    });
+  });
 }
 
-// console.log(readStudentDataAsync());
+// readStudentDataAsync()
+//   .then((res) => console.log(res))
+//   .catch((error) => {
+//     console.log(error);
+//   });
 
 // Sync
 function readStudentDataSync() {
@@ -86,4 +87,4 @@ function readStudentDataSync() {
   return parsedData;
 }
 
-console.log(readStudentDataSync());
+// console.log(readStudentDataSync());
