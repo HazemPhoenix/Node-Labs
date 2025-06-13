@@ -105,10 +105,30 @@ async function addNewStudentAsync(studentData) {
   }
 }
 
-addNewStudentAsync({
-  id: 4,
-  name: "John Smith",
-  age: 20,
-  grade: "A",
-  courses: ["Mathematics", "Physics", "Computer Science"],
-});
+// addNewStudentAsync({
+//   id: 4,
+//   name: "John Smith",
+//   age: 20,
+//   grade: "A",
+//   courses: ["Mathematics", "Physics", "Computer Science"],
+// });
+
+// Sync
+function addNewStudentSync(studentData) {
+  try {
+    const students = readStudentDataSync();
+    students.push(studentData);
+    fs.writeFileSync("students.json", JSON.stringify(students));
+    console.log("Student added successfully!");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+// addNewStudentSync({
+//   id: 4,
+//   name: "John Smith",
+//   age: 20,
+//   grade: "A",
+//   courses: ["Mathematics", "Physics", "Computer Science"],
+// });
