@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Alice Johnson",
     "age": 20,
-    "course": "Computer Science",
+    "course": "Bioinformatics",
     "grades": { "math": 90, "programming": 95 }
   },
   {

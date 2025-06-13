@@ -132,3 +132,18 @@ function addNewStudentSync(studentData) {
 //   grade: "A",
 //   courses: ["Mathematics", "Physics", "Computer Science"],
 // });
+
+/*--------------Update a student's course--------------*/
+
+// Sync
+function updateStudentCourse(studentID, newCourse) {
+  const students = readStudentDataSync();
+  students.forEach((student) => {
+    if (student.id == studentID) {
+      student.course = newCourse;
+    }
+  });
+  fs.writeFileSync("students.json", JSON.stringify(students));
+}
+
+updateStudentCourse(1, "Bioinformatics");
