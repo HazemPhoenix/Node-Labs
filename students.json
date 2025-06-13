@@ -19,12 +19,5 @@
     "age": 21,
     "course": "Web Development",
     "grades": { "html": 95, "javascript": 89 }
-  },
-  {
-    "id": 4,
-    "name": "John Smith",
-    "age": 20,
-    "grade": "A",
-    "courses": ["Mathematics", "Physics", "Computer Science"]
   }
 ]

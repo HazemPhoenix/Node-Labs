@@ -164,3 +164,17 @@ async function updateStudentCourseAsync(studentID, newCourse) {
 }
 
 // updateStudentCourseAsync(2, "Data Analysis");
+
+/*--------------Delete a student--------------*/
+
+// Async
+async function deleteStudentAsync(studentID) {
+  const students = await readStudentDataAsync();
+  const studentIndex = students.findIndex((student) => student.id == studentID);
+  students.splice(studentIndex, 1);
+  fs.writeFile("students.json", JSON.stringify(students), () => {
+    console.log(`Student ${studentID}, deleted successfully.`);
+  });
+}
+
+// deleteStudentAsync(4);
