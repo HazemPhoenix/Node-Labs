@@ -189,3 +189,13 @@ function deleteStudentSync(studentID) {
 }
 
 // deleteStudentSync(3);
+
+/*--------------Difference between sync and async--------------*/
+
+// Sync (Synchronous)
+// Blocks everything - Your code stops and waits until the file operation is completely done
+// If the file is large, your entire program freezes until it's finished
+
+// Async (Asynchronous)
+// Non-blocking - Your code continues running while the file operation happens in the background
+// Your program can handle other tasks while waiting for the file operation to complete
