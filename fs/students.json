@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "name": "John Smith",
+    "age": 20,
+    "grade": "A",
+    "courses": ["Mathematics", "Physics", "Computer Science"]
+  },
+  {
+    "id": 2,
+    "name": "Emily Johnson",
+    "age": 19,
+    "grade": "A+",
+    "courses": ["Biology", "Chemistry", "English"]
+  },
+  {
+    "id": 3,
+    "name": "Michael Brown",
+    "age": 21,
+    "grade": "B+",
+    "courses": ["History", "Political Science", "Economics"]
+  },
+  {
+    "id": 4,
+    "name": "Sarah Davis",
+    "age": 20,
+    "grade": "A-",
+    "courses": ["Psychology", "Sociology", "Statistics"]
+  },
+  {
+    "id": 5,
+    "name": "David Wilson",
+    "age": 22,
+    "grade": "B",
+    "courses": ["Engineering", "Computer Science", "Mathematics"]
+  },
+  {
+    "id": 6,
+    "name": "Shady",
+    "age": 24,
+    "grade": "A+",
+    "courses": ["Mathematics", "Physics", "Computer Science"]
+  }
+]

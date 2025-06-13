@@ -1,26 +1,48 @@
-# Lab 1: Revision on JavaScript
+### Part 2: File Operations
 
-## Lab Tasks
-
-### Part 1: JavaScript Warm-up
-
-Create a file named `warmup.js` and implement the following:
-
-1. Create an array of users with objects containing `name`, `age`, and `role`. Use this starter data:
+Create a file named `fileOperations.js`. Use this starter data for your students.json file:
 
 ```javascript
-const users = [
-  { name: "John Doe", age: 28, role: "developer" },
-  { name: "Jane Smith", age: 32, role: "admin" },
-  { name: "Bob Johnson", age: 24, role: "developer" },
-  { name: "Sarah Williams", age: 27, role: "manager" },
-  { name: "Mike Brown", age: 35, role: "admin" },
+const studentData = [
+  {
+    id: 1,
+    name: "Alice Johnson",
+    age: 20,
+    course: "Computer Science",
+    grades: {
+      math: 90,
+      programming: 95,
+    },
+  },
+  {
+    id: 2,
+    name: "Bob Smith",
+    age: 22,
+    course: "Data Science",
+    grades: {
+      statistics: 88,
+      machine_learning: 92,
+    },
+  },
+  {
+    id: 3,
+    name: "Carol Williams",
+    age: 21,
+    course: "Web Development",
+    grades: {
+      html: 95,
+      javascript: 89,
+    },
+  },
 ];
 ```
 
-2. Use array methods to:
-   - Filter users above age 30
-   - Transform the data to only include names
-   - Find the first user with role "admin" using array methods
-   - Find the last user with role "admin" using array methods
-   - Make deepCopy Function with example for nested objects
+1. Create a JSON file named 'students.json' with the sample student data above from the code
+2. Implement both synchronous and asynchronous file operations
+3. Create functions to:
+   - Write the studentData to students.json
+   - Read from students.json
+   - Add a new student
+   - (bonus) Update a student's course
+   - (bonus) Delete a student
+4. Compare the behavior of sync vs async operations
