@@ -30,11 +30,11 @@ const createPost = async (req, res) => {
 };
 
 const getAllPosts = async (req, res) => {
-  const posts = Post.find();
+  const posts = await Post.find({}, { title: 1, content: 1 });
 
   res.status(200).json({
     status: "Success",
-    message: "Users fetched successfully",
+    message: "Posts fetched successfully",
     data: posts,
   });
 };

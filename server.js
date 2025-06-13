@@ -17,13 +17,13 @@ app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/posts", postsRoutes);
 
 app.listen(3000, () => {
-  console.log("✅✅ Server is running on port 3000");
+  console.log("Server is running on port 3000");
   mongoose
-    .connect("mongodb://localhost:27017/blog-api")
+    .connect("mongodb://localhost:27017/local")
     .then(() => {
-      console.log("✅✅ Connected to MongoDB");
+      console.log("Connected to MongoDB");
     })
     .catch((err) => {
-      console.log("❌❌ Error connecting to MongoDB", err);
+      console.log("Error connecting to MongoDB", err);
     });
 });
