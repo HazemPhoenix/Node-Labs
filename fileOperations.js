@@ -178,3 +178,14 @@ async function deleteStudentAsync(studentID) {
 }
 
 // deleteStudentAsync(4);
+
+// Sync
+function deleteStudentSync(studentID) {
+  const students = readStudentDataSync();
+  const studentIndex = students.findIndex((student) => student.id == studentID);
+  students.splice(studentIndex, 1);
+  fs.writeFileSync("students.json", JSON.stringify(students));
+  console.log(`Student ${studentID}, deleted successfully.`);
+}
+
+// deleteStudentSync(3);

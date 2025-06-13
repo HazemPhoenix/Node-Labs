@@ -12,12 +12,5 @@
     "age": 22,
     "course": "Data Analysis",
     "grades": { "statistics": 88, "machine_learning": 92 }
-  },
-  {
-    "id": 3,
-    "name": "Carol Williams",
-    "age": 21,
-    "course": "Web Development",
-    "grades": { "html": 95, "javascript": 89 }
   }
 ]
