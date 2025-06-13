@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
 const usersRoutes = require("./routes/usersRoutes");
+const postsRoutes = require("./routes/postsRoutes");
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(cors());
 
 // routes
 app.use("/api/v1/users", usersRoutes);
+app.use("/api/v1/posts", postsRoutes);
 
 app.listen(3000, () => {
   console.log("✅✅ Server is running on port 3000");
