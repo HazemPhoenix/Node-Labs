@@ -60,7 +60,7 @@ function writeStudentDataSync(data) {
 // Read student.json data
 
 // Async
-function readStudentData() {
+function readStudentDataAsync() {
   const parsedStudentData = fs.readFile(
     "students.json",
     "utf-8",
@@ -76,4 +76,14 @@ function readStudentData() {
   );
   return parsedStudentData;
 }
-// console.log(readStudentData());
+
+// console.log(readStudentDataAsync());
+
+// Sync
+function readStudentDataSync() {
+  const studentData = fs.readFileSync("students.json", "utf-8");
+  const parsedData = JSON.parse(studentData);
+  return parsedData;
+}
+
+console.log(readStudentDataSync());
