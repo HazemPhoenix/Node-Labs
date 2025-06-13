@@ -136,7 +136,7 @@ function addNewStudentSync(studentData) {
 /*--------------Update a student's course--------------*/
 
 // Sync
-function updateStudentCourse(studentID, newCourse) {
+function updateStudentCourseSync(studentID, newCourse) {
   const students = readStudentDataSync();
   students.forEach((student) => {
     if (student.id == studentID) {
@@ -144,6 +144,23 @@ function updateStudentCourse(studentID, newCourse) {
     }
   });
   fs.writeFileSync("students.json", JSON.stringify(students));
+  console.log(`Student ${studentID}, course updated successfully.`);
 }
 
-updateStudentCourse(1, "Bioinformatics");
+// updateStudentCourseSync(1, "Bioinformatics");
+
+// Async
+
+async function updateStudentCourseAsync(studentID, newCourse) {
+  const students = await readStudentDataAsync();
+  students.forEach((student) => {
+    if (student.id == studentID) {
+      student.course = newCourse;
+    }
+  });
+  fs.writeFile("students.json", JSON.stringify(students), () => {
+    console.log(`Student ${studentID}, course updated successfully.`);
+  });
+}
+
+// updateStudentCourseAsync(2, "Data Analysis");

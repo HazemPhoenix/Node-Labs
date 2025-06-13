@@ -10,7 +10,7 @@
     "id": 2,
     "name": "Bob Smith",
     "age": 22,
-    "course": "Data Science",
+    "course": "Data Analysis",
     "grades": { "statistics": 88, "machine_learning": 92 }
   },
   {
