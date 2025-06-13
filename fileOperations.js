@@ -88,3 +88,27 @@ function readStudentDataSync() {
 }
 
 // console.log(readStudentDataSync());
+
+/*--------------Add a new Student--------------*/
+
+// Async
+async function addNewStudentAsync(studentData) {
+  try {
+    const students = await readStudentDataAsync();
+    students.push(studentData);
+    console.log(students);
+    fs.writeFile("students.json", JSON.stringify(students), () =>
+      console.log("Student added successfully!")
+    );
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+addNewStudentAsync({
+  id: 4,
+  name: "John Smith",
+  age: 20,
+  grade: "A",
+  courses: ["Mathematics", "Physics", "Computer Science"],
+});
