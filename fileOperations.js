@@ -56,3 +56,24 @@ function writeStudentDataSync(data) {
 
 // writeStudentDataAsync(studentData);
 // writeStudentDataSync(studentData);
+
+// Read student.json data
+
+// Async
+function readStudentData() {
+  const parsedStudentData = fs.readFile(
+    "students.json",
+    "utf-8",
+    (err, data) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const parsed = JSON.parse(data);
+        console.log(parsed);
+        return parsed;
+      }
+    }
+  );
+  return parsedStudentData;
+}
+// console.log(readStudentData());
