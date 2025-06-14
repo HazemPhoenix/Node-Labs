@@ -1,10 +1,10 @@
 const User = require("../models/usersModel");
 const { isValidObjectId } = require("mongoose");
 
-const createUser = async (req, res) => {
+const register = async (req, res) => {
   try {
     const { body } = req;
-    if (!body.name || !body.email || !body.password) {
+    if (!body.name || !body.email || !body.password || !body.confirmPassword) {
       return res.status(400).json({
         status: "Failure",
         message: "there is some missing data",
@@ -128,7 +128,7 @@ const deleteUserById = async (req, res) => {
 };
 
 module.exports = {
-  createUser,
+  register,
   getAllUsers,
   getUserById,
   updateUserById,
