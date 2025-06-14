@@ -1,32 +1,40 @@
 const User = require("../models/usersModel");
 const { isValidObjectId } = require("mongoose");
+const AppError = require("../utils/AppError");
+const bcrypt = require("bcrypt");
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
   try {
     const { body } = req;
     if (!body.name || !body.email || !body.password || !body.confirmPassword) {
-      return res.status(400).json({
-        status: "Failure",
-        message: "there is some missing data",
-      });
+      throw new AppError("Please enter all required data.", 400);
     }
+
+    if (body.password !== body.confirmPassword) {
+      throw new AppError("Passwords do not match", 400);
+    }
+
+    const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
+    const hashedPassword = await bcrypt.hash(body.password, SALT_ROUNDS);
 
     const user = await User.create({
       name: body.name,
       email: body.email,
-      password: body.password,
+      password: hashedPassword,
     });
 
     res.status(201).json({
       status: "Success",
       message: "User created successfully",
-      data: user,
+      data: {
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        _id: user.id,
+      },
     });
-  } catch (err) {
-    res.status(500).json({
-      status: "Failure",
-      message: "Internal server error",
-    });
+  } catch (error) {
+    next(error);
   }
 };
 

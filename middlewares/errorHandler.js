@@ -13,26 +13,24 @@ const errorHandler = (error, req, res, next) => {
     return res
       .status(400)
       .json(
-        errorFormatter(
-          `This ${Object.keys(error.keyValue)[0]} is already taken`
-        )
+        formatError(`This ${Object.keys(error.keyValue)[0]} is already taken`)
       );
   }
 
   // Mongoose validation error
   if (error.name == "ValidationError") {
-    return res.status(400).json(errorFormatter(error.message));
+    return res.status(400).json(formatError(error.message));
   }
 
   // Mongoose cast error
   if (error.name == "CastError") {
     return res
       .status(400)
-      .json(errorFormatter(`Cast Error for ${error.path}: ${error.value}`));
+      .json(formatError(`Cast Error for ${error.path}: ${error.value}`));
   }
 
   // Formatting function to ensure consistency in error structure
-  function errorFormatter(message) {
+  function formatError(message) {
     return {
       status: "Failure",
       message,

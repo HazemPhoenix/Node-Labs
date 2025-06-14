@@ -5,6 +5,8 @@ const cors = require("cors");
 const usersRoutes = require("./routes/usersRoutes");
 const postsRoutes = require("./routes/postsRoutes");
 require("dotenv").config();
+const AppError = require("./utils/AppError");
+const errorHandler = require("./middlewares/errorHandler");
 
 const app = express();
 
@@ -14,8 +16,22 @@ app.use(morgan("dev"));
 app.use(cors());
 
 // routes
+
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Server is running",
+  });
+});
+
 app.use("/api/v1/users", usersRoutes);
 app.use("/api/v1/posts", postsRoutes);
+
+app.use((req, res, next) => {
+  next(new AppError("Route not found", 404));
+});
+
+app.use(errorHandler);
 
 app.listen(process.env.PORT_NUMBER, () => {
   console.log(`Server is running on port ${process.env.PORT_NUMBER}`);
