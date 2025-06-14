@@ -3,6 +3,10 @@ const { isValidObjectId } = require("mongoose");
 const AppError = require("../utils/AppError");
 const bcrypt = require("bcrypt");
 
+const jwt = require("jsonwebtoken");
+const { promisify } = require("util");
+const jwtSign = promisify(jwt.sign);
+
 const register = async (req, res, next) => {
   try {
     const { body } = req;
@@ -32,6 +36,44 @@ const register = async (req, res, next) => {
         role: user.role,
         _id: user.id,
       },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const login = async (req, res, next) => {
+  try {
+    const { body } = req;
+    if (!body.email || !body.password) {
+      throw new AppError("Please enter all required fields", 400);
+    }
+
+    const user = await User.findOne({ email: body.email });
+
+    if (!user) {
+      throw new AppError("Invalid Credentials", 401);
+    }
+
+    const isCorrectPassword = await bcrypt.compare(
+      body.password,
+      user.password
+    );
+
+    if (!isCorrectPassword) {
+      throw new AppError("Invalid Credentials", 401);
+    }
+
+    const token = await jwtSign(
+      { id: user._id, role: user.role },
+      process.env.PRIVATE_KEY,
+      { expiresIn: "1d" }
+    );
+
+    res.status(200).json({
+      status: "Success",
+      message: "Logged in Successfully!",
+      data: { token },
     });
   } catch (error) {
     next(error);
@@ -137,6 +179,7 @@ const deleteUserById = async (req, res) => {
 
 module.exports = {
   register,
+  login,
   getAllUsers,
   getUserById,
   updateUserById,
