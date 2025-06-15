@@ -11,6 +11,7 @@ const { sanitizeMongoInput } = require("express-v5-mongo-sanitize");
 const helmet = require("helmet");
 const { xss } = require("express-xss-sanitizer");
 const hpp = require("hpp");
+const rateLimiter = require("./middlewares/rateLimiter");
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(sanitizeMongoInput);
 app.use(helmet());
 app.use(xss());
 app.use(hpp());
+app.use(rateLimiter);
 
 // body parser
 app.use(morgan("dev"));
