@@ -10,15 +10,17 @@ const errorHandler = require("./middlewares/errorHandler");
 const { sanitizeMongoInput } = require("express-v5-mongo-sanitize");
 const helmet = require("helmet");
 const { xss } = require("express-xss-sanitizer");
+const hpp = require("hpp");
 
 const app = express();
 
+app.use(express.json()); // app.use => application level middleware , parses the request body to the json format
 app.use(sanitizeMongoInput);
 app.use(helmet());
 app.use(xss());
+app.use(hpp());
 
 // body parser
-app.use(express.json()); // app.use => application level middleware , parses the request body to the json format
 app.use(morgan("dev"));
 app.use(cors());
 
