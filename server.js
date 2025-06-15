@@ -7,8 +7,11 @@ const postsRoutes = require("./routes/postsRoutes");
 require("dotenv").config();
 const AppError = require("./utils/AppError");
 const errorHandler = require("./middlewares/errorHandler");
+import { sanitizeMongoInput } from "express-5-mongo-sanitize";
 
 const app = express();
+
+app.use(sanitizeMongoInput);
 
 // body parser
 app.use(express.json()); // app.use => application level middleware , parses the request body to the json format
