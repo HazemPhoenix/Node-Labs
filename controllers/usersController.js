@@ -15,6 +15,7 @@ const register = async (req, res, next) => {
       throw new AppError("Please enter all required data.", 400);
     }
 
+    // Check if the input email already exists in the database
     const userAlreadyExists = (await User.findOne({ email: body.email }))
       ? true
       : false;
@@ -23,6 +24,7 @@ const register = async (req, res, next) => {
       throw new AppError("Email already exists", 400);
     }
 
+    // Check if the password and the confirmation password match
     if (body.password !== body.confirmPassword) {
       throw new AppError("Passwords do not match", 400);
     }
@@ -58,13 +60,14 @@ const login = async (req, res, next) => {
     if (!body.email || !body.password) {
       throw new AppError("Please enter all required fields", 400);
     }
-
+    // Check if the email is correct
     const user = await User.findOne({ email: body.email });
 
     if (!user) {
       throw new AppError("Invalid Credentials", 401);
     }
 
+    // Check if the password is correct
     const isCorrectPassword = await bcrypt.compare(
       body.password,
       user.password

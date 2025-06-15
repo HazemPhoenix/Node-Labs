@@ -26,6 +26,18 @@ const errorHandler = (error, req, res, next) => {
       .json(formatError(`Cast Error for ${error.path}: ${error.value}`));
   }
 
+  // JWT Errors
+
+  // Invalid token
+  if (error.name === "JsonWebTokenError") {
+    return res.status(401).json(formatError("Invalid token"));
+  }
+
+  // Token expired
+  if (error.name === "TokenExpiredError" || error.name === "NotBeforeError") {
+    return res.status(401).json(formatError("Token expired"));
+  }
+
   // Formatting function to ensure consistency in error structure
   function formatError(message) {
     return {
