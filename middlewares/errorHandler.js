@@ -2,10 +2,7 @@ const AppError = require("../utils/AppError");
 
 const errorHandler = (error, req, res, next) => {
   if (error instanceof AppError) {
-    return res.status(error.statusCode).json({
-      status: "Failure",
-      message: error.message,
-    });
+    return res.status(error.statusCode).json(formatError(error.message));
   }
 
   // Mongoose dublicateKey error

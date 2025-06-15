@@ -1,6 +1,7 @@
 const User = require("../models/usersModel");
 const { isValidObjectId } = require("mongoose");
 const AppError = require("../utils/AppError");
+const ResponseFormatter = require("../utils/ResponseFormatter");
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
@@ -12,6 +13,14 @@ const register = async (req, res, next) => {
     const { body } = req;
     if (!body.name || !body.email || !body.password || !body.confirmPassword) {
       throw new AppError("Please enter all required data.", 400);
+    }
+
+    const userAlreadyExists = (await User.findOne({ email: body.email }))
+      ? true
+      : false;
+
+    if (userAlreadyExists) {
+      throw new AppError("Email already exists", 400);
     }
 
     if (body.password !== body.confirmPassword) {
@@ -27,16 +36,17 @@ const register = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    res.status(201).json({
-      status: "Success",
-      message: "User created successfully",
-      data: {
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        _id: user.id,
-      },
-    });
+    const userData = {
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      _id: user.id,
+    };
+    res
+      .status(201)
+      .json(
+        new ResponseFormatter("Success", "User created successfully", userData)
+      );
   } catch (error) {
     next(error);
   }
@@ -64,17 +74,17 @@ const login = async (req, res, next) => {
       throw new AppError("Invalid Credentials", 401);
     }
 
+    // Email and password are both correct, now we generate a token and send it in the ResponseFormatter
     const token = await jwtSign(
       { id: user._id, role: user.role },
       process.env.PRIVATE_KEY,
       { expiresIn: "1d" }
     );
-
-    res.status(200).json({
-      status: "Success",
-      message: "Logged in Successfully!",
-      data: { token },
-    });
+    res
+      .status(200)
+      .json(
+        new ResponseFormatter("Success", "Logged in Successfully!", { token })
+      );
   } catch (error) {
     next(error);
   }
@@ -82,39 +92,29 @@ const login = async (req, res, next) => {
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({}, { name: 1, email: 1 });
-
-  res.status(200).json({
-    status: "Success",
-    message: "Users fetched successfully",
-    data: users,
-  });
+  res
+    .status(200)
+    .json(
+      new ResponseFormatter("Success", "Users fetched successfully", users)
+    );
 };
 
 const getUserById = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
-    return res.status(400).json({
-      status: "Failure",
-      message: "Invalid user id",
-    });
+    new AppError("Invalid user id", 400);
   }
 
   //   const user = await User.findById(id);
   const user = await User.findOne({ _id: id }, { name: 1, email: 1 });
 
   if (!user) {
-    return res.status(404).json({
-      status: "Failure",
-      message: "User not found",
-    });
+    new AppError("User not found", 404);
   }
-
-  res.status(200).json({
-    status: "Success",
-    message: "User fetched successfully",
-    data: user,
-  });
+  res
+    .status(200)
+    .json(new ResponseFormatter("Success", "User fetched successfully", user));
 };
 
 const updateUserById = async (req, res) => {
@@ -122,17 +122,11 @@ const updateUserById = async (req, res) => {
   const { body } = req;
 
   if (!body.name) {
-    return res.status(400).json({
-      status: "Failure",
-      message: "Name is required",
-    });
+    new AppError("Name is required", 400);
   }
 
   if (!isValidObjectId(id)) {
-    return res.status(400).json({
-      status: "Failure",
-      message: "Invalid user id",
-    });
+    new AppError("Invalid user id", 400);
   }
 
   const user = await User.findByIdAndUpdate(
@@ -142,36 +136,25 @@ const updateUserById = async (req, res) => {
   );
 
   if (!user) {
-    return res.status(404).json({
-      status: "Failure",
-      message: "User not found",
-    });
+    new AppError("User not found", 404);
   }
 
-  res.status(200).json({
-    status: "Success",
-    message: "User updated successfully",
-    data: user,
-  });
+  res
+    .status(200)
+    .json(new ResponseFormatter("Success", "User updated successfully", user));
 };
 
 const deleteUserById = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
-    return res.status(400).json({
-      status: "Failure",
-      message: "Invalid user id",
-    });
+    new AppError("Invalid user id", 400);
   }
 
   const user = await User.findOneAndDelete({ _id: id });
 
   if (!user) {
-    return res.status(404).json({
-      status: "Failure",
-      message: "User not found",
-    });
+    new AppError("User not found", 404);
   }
 
   res.status(204).send();
