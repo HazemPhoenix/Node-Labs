@@ -1,69 +1,59 @@
 const Post = require("../models/postsModel");
+const AppError = require("../utils/AppError");
+const ResponseFormatter = require("../utils/ResponseFormatter");
 const { isValidObjectId } = require("mongoose");
 
 const createPost = async (req, res) => {
   try {
     const { body } = req;
     if (!body.title || !body.content) {
-      return res.status(400).json({
-        status: "Failure",
-        message: "there is some missing data",
-      });
+      new AppError("There is some missing data", 400);
     }
 
     const post = await Post.create({
       title: body.title,
       content: body.content,
+      ownerID: req.user.id,
     });
 
-    res.status(201).json({
-      status: "Success",
-      message: "Post created successfully",
-      data: post,
-    });
+    res
+      .status(201)
+      .json(
+        new ResponseFormatter("Success", "Post created successfully", post)
+      );
   } catch (err) {
-    res.status(500).json({
-      status: "Failure",
-      message: "Internal server error",
-    });
+    new AppError("Internal server error", 500);
   }
 };
 
 const getAllPosts = async (req, res) => {
-  const posts = await Post.find({}, { title: 1, content: 1 });
-
-  res.status(200).json({
-    status: "Success",
-    message: "Posts fetched successfully",
-    data: posts,
-  });
+  try {
+    const posts = await Post.find({}, { title: 1, content: 1 });
+    res
+      .status(200)
+      .json(
+        new ResponseFormatter("Success", "Posts fetched successfully", posts)
+      );
+  } catch (error) {
+    next(error);
+  }
 };
 
 const getPostById = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
-    return res.status(400).json({
-      status: "Failure",
-      message: "Invalid post id",
-    });
+    new AppError("Invalid post id", 400);
   }
 
   const post = await Post.findById(id);
-  // const post = await User.findOne({ _id: id }, { title: 1, content: 1 });
 
   if (!post) {
-    return res.status(404).json({
-      status: "Failure",
-      message: "Post not found",
-    });
+    new AppError("Post not found", 404);
   }
-
-  res.status(200).json({
-    status: "Success",
-    message: "Post fetched successfully",
-    data: post,
-  });
+  res
+    .status(200)
+    .json(new ResponseFormatter("Success", "Post fetched successfully", post));
 };
 
 const updatePostById = async (req, res) => {
@@ -71,50 +61,42 @@ const updatePostById = async (req, res) => {
   const { body } = req;
 
   if (!isValidObjectId(id)) {
-    return res.status(400).json({
-      status: "Failure",
-      message: "Invalid post id",
-    });
+    new AppError("Invalid post id", 400);
   }
 
-  const post = await Post.findByIdAndUpdate(
-    id,
-    { title: body.title },
-    { content: body.content },
-    { new: true }
-  );
+  let post = await Post.findById(id);
 
-  if (!post) {
-    return res.status(404).json({
-      status: "Failure",
-      message: "Post not found",
-    });
+  if (body.title) {
+    post.title = body.title;
   }
 
-  res.status(200).json({
-    status: "Success",
-    message: "Post updated successfully",
-    data: post,
-  });
+  if (body.content) {
+    post.content = body.content;
+  }
+
+  const updatedPost = await post.save();
+
+  if (!updatedPost) {
+    new AppError("Post not found", 404);
+  }
+  res
+    .status(200)
+    .json(
+      new ResponseFormatter("Success", "Post updated successfully", updatedPost)
+    );
 };
 
 const deletePostById = async (req, res) => {
   const { id } = req.params;
 
   if (!isValidObjectId(id)) {
-    return res.status(400).json({
-      status: "Failure",
-      message: "Invalid post id",
-    });
+    new AppError("Invalid post id", 400);
   }
 
   const post = await Post.findOneAndDelete({ _id: id });
 
   if (!post) {
-    return res.status(404).json({
-      status: "Failure",
-      message: "Post not found",
-    });
+    new AppError("Post not found", 404);
   }
 
   res.status(204).send();

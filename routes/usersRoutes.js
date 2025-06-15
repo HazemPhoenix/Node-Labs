@@ -10,25 +10,25 @@ router.post("/login", usersController.login);
 router.get(
   "/",
   authenticate,
-  authorize(["admin"]),
+  authorize.authorizeUsers(["admin"]),
   usersController.getAllUsers
 );
 router.get(
   "/:id",
   authenticate,
-  authorize(["admin"]),
+  authorize.authorizeUsers(["admin"]),
   usersController.getUserById
 );
 router.patch(
   "/:id",
   authenticate,
-  authorize(["admin"]),
+  authorize.authorizeUsers(["admin"]),
   usersController.updateUserById
 );
 router.delete(
   "/:id",
   authenticate,
-  authorize(["admin"]),
+  authorize.authorizeUsers(["admin"]),
   usersController.deleteUserById
 );
 

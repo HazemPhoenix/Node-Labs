@@ -8,25 +8,25 @@ router.post("/", authenticate, postsController.createPost);
 router.get(
   "/",
   authenticate,
-  authorize(["admin"]),
+  authorize.authorizePosts(["admin", "user"]),
   postsController.getAllPosts
 );
 router.get(
   "/:id",
   authenticate,
-  authorize(["admin"]),
+  authorize.authorizePosts(["admin", "user"]),
   postsController.getPostById
 );
 router.patch(
   "/:id",
   authenticate,
-  authorize(["admin"]),
+  authorize.authorizePosts(["admin"]),
   postsController.updatePostById
 );
 router.delete(
   "/:id",
   authenticate,
-  authorize(["admin"]),
+  authorize.authorizePosts(["admin"]),
   postsController.deletePostById
 );
 
