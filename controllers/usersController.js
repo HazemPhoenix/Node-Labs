@@ -11,9 +11,6 @@ const jwtSign = promisify(jwt.sign);
 const register = async (req, res, next) => {
   try {
     const { body } = req;
-    if (!body.name || !body.email || !body.password || !body.confirmPassword) {
-      throw new AppError("Please enter all required data.", 400);
-    }
 
     // Check if the input email already exists in the database
     const userAlreadyExists = (await User.findOne({ email: body.email }))
@@ -22,11 +19,6 @@ const register = async (req, res, next) => {
 
     if (userAlreadyExists) {
       throw new AppError("Email already exists", 400);
-    }
-
-    // Check if the password and the confirmation password match
-    if (body.password !== body.confirmPassword) {
-      throw new AppError("Passwords do not match", 400);
     }
 
     const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS);
@@ -57,9 +49,6 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
   try {
     const { body } = req;
-    if (!body.email || !body.password) {
-      throw new AppError("Please enter all required fields", 400);
-    }
     // Check if the email is correct
     const user = await User.findOne({ email: body.email });
 

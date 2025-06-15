@@ -6,9 +6,6 @@ const { isValidObjectId } = require("mongoose");
 const createPost = async (req, res) => {
   try {
     const { body } = req;
-    if (!body.title || !body.content) {
-      new AppError("There is some missing data", 400);
-    }
 
     const post = await Post.create({
       title: body.title,
