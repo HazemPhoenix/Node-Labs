@@ -79,7 +79,7 @@ const login = async (req, res, next) => {
 
     // Email and password are both correct, now we generate a token and send it in the ResponseFormatter
     const token = await jwtSign(
-      { id: user._id, role: user.role },
+      { id: user._id, email: user.email, name: user.name, role: user.role },
       process.env.PRIVATE_KEY,
       { expiresIn: "1d" }
     );
