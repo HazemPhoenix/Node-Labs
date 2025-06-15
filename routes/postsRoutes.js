@@ -1,12 +1,33 @@
 const { Router } = require("express");
+const authenticate = require("../middlewares/authenticate");
+const authorize = require("../middlewares/authorize");
 const postsController = require("../controllers/postsController");
-const requestDetailsLogger = require("../middlewares/requestDetailsLogger");
 const router = Router();
 
-router.post("/", requestDetailsLogger, postsController.createPost);
-router.get("/", postsController.getAllPosts);
-router.get("/:id", postsController.getPostById);
-router.patch("/:id", postsController.updatePostById);
-router.delete("/:id", postsController.deletePostById);
+router.post("/", authenticate, postsController.createPost);
+router.get(
+  "/",
+  authenticate,
+  authorize(["admin"]),
+  postsController.getAllPosts
+);
+router.get(
+  "/:id",
+  authenticate,
+  authorize(["admin"]),
+  postsController.getPostById
+);
+router.patch(
+  "/:id",
+  authenticate,
+  authorize(["admin"]),
+  postsController.updatePostById
+);
+router.delete(
+  "/:id",
+  authenticate,
+  authorize(["admin"]),
+  postsController.deletePostById
+);
 
 module.exports = router;
